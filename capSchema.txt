@@ -1,0 +1,53 @@
+CREATE TYPE difficulty AS ENUM (
+	'easy', 
+	'medium', 
+	'hard'
+);
+
+CREATE TYPE status AS ENUM (
+	'correct', 
+	'incorrect'
+);
+
+CREATE TABLE teacher (
+	teach_id  serial primary key,
+	teach_name varchar(50)
+);
+
+CREATE TABLE student (
+	stud_id serial primary key,
+	stud_name varchar(50)
+);
+
+CREATE TABLE problem (
+	pro_id serial primary key,
+	pro_title varchar(50),
+	pro_statement bytea, 
+	pro_difficulty difficulty,
+	fun_name varchar(20),
+	teach_id integer REFERENCES teacher(teach_id)
+);
+
+CREATE TABLE method (
+	method_id serial primary key,
+	method_file bytea,
+	lang varchar(20), 
+	returntype varchar(20), 
+	parameter text, 
+	pro_id integer REFERENCES problem(pro_id)
+);
+
+CREATE TABLE testcase (
+	tc_id serial, 
+	tc_file bytea, 
+	pro_id integer REFERENCES problem(pro_id)
+);
+
+CREATE TABLE submission (
+	sub_id serial primary key,
+	sub_status status, 
+	sub_file bytea, 
+	pro_id integer REFERENCES problem(pro_id),
+	stud_id integer REFERENCES student(stud_id)
+);
+
